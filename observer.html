@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Observer</title>
+</head>
+<body>
+	<textarea id="blog" cols="30" rows="10"></textarea>
+	<span>Words count: </span> <span class="words-count"></span>
+
+	<script>
+		class EventObserver {
+			constructor () {
+				this.observers = [];
+			}
+			subscribe (fn) {
+				this.observers.push(fn);
+			}
+			unSubscribe (fn) {
+				this.observers = this.observers.filter(subscribe => subscribe !== fn);
+			}
+			broadcast (data) {
+				this.observers.forEach(subscribe => subscribe(data));
+			}
+		};
+
+		const getWordsCout = text => (text ? text.trim().split(/\s+/).length : 0);
+
+		const blogObservers = new EventObserver();
+		const blog = document.querySelector('#blog');
+		const count = document.querySelector('.words-count');
+
+		blogObservers.subscribe(text => {
+			count.innerHTML = getWordsCout(text);
+		});
+
+		blog.addEventListener('input', () => {
+			blogObservers.broadcast(blog.value);
+		});
+	</script>
+</body>
+</html>
