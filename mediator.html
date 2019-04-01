@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>patterns</title>
+</head>
+<body>
+	<div class="table-res"></div>
+	<div class="btns_wrapp"></div>
+	<script>
+		class Player {
+			constructor (name) {
+				this.name = name;
+				this.points= 0;
+			}
+			addedControll () {
+				const wrapp = document.querySelector('.btns_wrapp');
+				const btn = document.createElement('button');
+				btn.innerHTML = this.name;
+				btn.onclick = () => {
+					this.addPoint();
+				}
+				wrapp.appendChild(btn);
+			}
+			addPoint () {
+				this.points++;
+				Mediator.played();
+			}
+		};
+
+		const Result = {
+			nodeLink: document.querySelector('.table-res'),
+			updateResult (res) {
+				this.nodeLink.innerHTML = JSON.stringify(res);
+			}
+		};
+
+		const Mediator = {
+			players: {},
+			setup (...names) {
+				names.forEach(name => {
+					this.players[name] = new Player(name);
+					this.players[name].addedControll();
+				});
+			},
+			played () {
+				Result.updateResult(this.players)
+			}
+		};
+
+		Mediator.setup('Roma', 'Bot');
+	</script>
+</body>
+</html>
